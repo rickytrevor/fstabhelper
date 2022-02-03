@@ -8,3 +8,6 @@ to use this script you just need to run it as sudo via bash and specify the devi
 Example:
 sudo bash automount.sh /dev/sda1 /mnt
 
+## Compatibility
+This script should work on all linux distributions running systemD (if you look at the source code you'll see that i use x-systemd.device-timeout, I don't know what happends in a non-systemd distro)
+I've only tested this in my main rig (fedora35) and server (Rocky linux 8.5)
