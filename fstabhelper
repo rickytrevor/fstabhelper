@@ -1,20 +1,25 @@
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+#define RED
+RED='\033[0;31m'
+
 if [ "$(id -u)" != "0" ]; then
    echo "This script must be run as root" 1>&2
    exit 1
 fi
 
 if [ $# -ne 2 ]; then
-   echo "Usage: $0 /dev/device mountpoint"
+   echo -e "${RED}Usage: $0 /dev/device mountpoint${NC}"
    exit 1
 fi
 
 if [ ! -b $1 ]; then
-   echo "Invalid device: $1"
+   echo -e "${RED}Invalid device: $1${NC}"
    exit 1
 fi
 #check if lsblk $1 has multiple elements containing $1, if so, exit
 if [ $(lsblk $1 | wc -l) -gt 2 ]; then
-   echo "Device $1 is not unique"
+   echo -e "${RED}Device $1 is not unique${NC}"
    exit 1
 fi
 UUID=$(blkid -s UUID ! grep $1)
@@ -26,4 +31,5 @@ fs=${fs#*TYPE=\"}
 fs=${fs%\"}
 echo $fs
 echo "editing /etc/fstab, adding $1, UUID=$UUID to $2"
-echo "UUID=$UUID $2 $fs  nofail,x-systemd.device-timeout=1ms defaults 0 0" >> /etc/fstab
+echo -e "UUID=$UUID $2 $fs  nofail,x-systemd.device-timeout=1ms defaults 0 0" >> /etc/fstab
+echo -e "${GREEN}success!${NC}"
